@@ -3,6 +3,7 @@ package com.kappa.resources.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,6 +11,10 @@ import java.util.List;
 @Table(name = "user")
 @Data
 public class UserEntity implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -4812036642740958551L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

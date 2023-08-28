@@ -36,7 +36,7 @@ public class SecurityConfig {
         httpSecurity.formLogin(Customizer.withDefaults());
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers(API_PROTECTED_PATH_RESOURCE).hasAnyRole(ROLE_ADMIN, ROLE_USER)
+                        .requestMatchers(API_PROTECTED_PATH_RESOURCE).hasAuthority(ROLE_ADMIN)
                         .anyRequest().permitAll()
         );
         httpSecurity.oauth2ResourceServer(oauth->oauth.jwt(

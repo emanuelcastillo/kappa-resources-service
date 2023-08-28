@@ -13,20 +13,18 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1")
-public class ApiController {
+public class UserController {
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello";
-    }
-
     @GetMapping("/user/{id}")
-    public Optional<?> getUser(@PathVariable(name = "id") Long id){
-        //return this.userRepository.findById(id);
-        return this.userRepository.findById(id);
+    public Optional<?> getUser(@PathVariable(name = "id") Optional<Long> id){
+        //var user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(id.isPresent()){
+            return this.userRepository.findById(id.get());
+        }
+        return Optional.of(this.userRepository.findAll());
     }
 
     @PutMapping("/user/{id}")
@@ -54,8 +52,8 @@ public class ApiController {
         }
     }
 
-    @PostMapping("/user/save")
-    public String saveNewUser(@RequestBody UserEntity newUser){
+    @PostMapping("/user")
+    public String savUser(@RequestBody UserEntity newUser){
         try {
             var user = new UserEntity();
             user.setId(newUser.getId());
