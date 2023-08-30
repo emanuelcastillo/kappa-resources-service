@@ -1,24 +1,16 @@
 package com.kappa.resources.config;
 
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
-import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 @Configuration
 public class SecurityConfig {
@@ -36,8 +28,9 @@ public class SecurityConfig {
         httpSecurity.formLogin(Customizer.withDefaults());
         httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers(API_PROTECTED_PATH_RESOURCE).hasAuthority(ROLE_ADMIN)
-                        .anyRequest().permitAll()
+                        .requestMatchers("/public/*").permitAll()
+                        .requestMatchers("/api/**").hasAuthority(ROLE_ADMIN)
+                        
         );
         httpSecurity.oauth2ResourceServer(oauth->oauth.jwt(
                 confing -> confing.decoder(JwtDecoders.fromIssuerLocation("http://localhost:3000"))
